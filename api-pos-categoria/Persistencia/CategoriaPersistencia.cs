@@ -1,4 +1,5 @@
 using api_pos_categoria.Modelos;
+using api_pos_categoria.Modelos.Global;
 using Dapper;
 using MySql.Data.MySqlClient;
 
@@ -13,11 +14,12 @@ public class CategoriaPersistencia : ICategoriaPersistencia
         _stringConnection = Environment.GetEnvironmentVariable("StringConnection") ?? string.Empty;
     }
 
-    public async Task<Categoria> ActualizarCategoria(Categoria request)
+    public async Task<Respuesta<Categoria, Mensaje>> ActualizarCategoria(Categoria request)
     {
         using (MySqlConnection conn = new(_stringConnection))
         {
-            Categoria categoria;
+            var respuesta = new Respuesta<Categoria, Mensaje>();
+            Mensaje mensaje;
             try
             {
                 await conn.OpenAsync();
@@ -35,12 +37,17 @@ public class CategoriaPersistencia : ICategoriaPersistencia
                 var resultado = await conn.ExecuteAsync(query, parametros);
 
                 if (resultado > 0)
-                    return request;
-                return null;
+                {
+                    return respuesta.RespuestaExito(request);
+                }
+
+                mensaje = new("NO-UPDATE-DB", "No fue posible actualizar la categoria, vuelta a intentarlo o valide que exista");
+                return respuesta.RespuestaError(400, mensaje);
             }
             catch (Exception ex)
             {
-                return null;
+                mensaje = new("NO-CON-DB", "Tenemos problemas con la base de datos, reporte al administrador", ex);
+                return respuesta.RespuestaError(500, mensaje);
             }
             finally
             {
@@ -50,11 +57,12 @@ public class CategoriaPersistencia : ICategoriaPersistencia
         }
     }
 
-    public async Task<Categoria> CrearCategoria(Categoria request)
+    public async Task<Respuesta<Categoria, Mensaje>> CrearCategoria(Categoria request)
     {
         using (MySqlConnection conn = new(_stringConnection))
         {
-            Categoria categoria;
+            var respuesta = new Respuesta<Categoria, Mensaje>();
+            Mensaje mensaje;
             try
             {
                 await conn.OpenAsync();
@@ -74,13 +82,16 @@ public class CategoriaPersistencia : ICategoriaPersistencia
                 {
                     var nuevoId = await conn.QueryFirstAsync<int>("SELECT LAST_INSERT_ID()");
                     request.IdCategoria = nuevoId;
-                    return request;
+                    return respuesta.RespuestaExito(request);
                 }
-                return null;
+
+                mensaje = new("NO-CREATE-DB", "No fue posible crear la categoria, revise los datos proporcionados y vuelta a intentarlo");
+                return respuesta.RespuestaError(400, mensaje);
             }
             catch (Exception ex)
             {
-                return null;
+                mensaje = new("NO-CON-DB", "Tenemos problemas con la base de datos, reporte al administrador", ex);
+                return respuesta.RespuestaError(500, mensaje);
             }
             finally
             {
@@ -90,10 +101,12 @@ public class CategoriaPersistencia : ICategoriaPersistencia
         }
     }
 
-    public async Task<bool> EliminarCategoria(int id)
+    public async Task<Respuesta<Mensaje, Mensaje>> EliminarCategoria(int id)
     {
         using (MySqlConnection conn = new(_stringConnection))
         {
+            Respuesta<Mensaje, Mensaje> respuesta = new();
+            Mensaje mensaje;
             try
             {
                 await conn.OpenAsync();
@@ -109,13 +122,18 @@ public class CategoriaPersistencia : ICategoriaPersistencia
                 var resultado = await conn.ExecuteAsync(query, parametros);
 
                 if (resultado > 0)
-                    return true;
+                {
+                    mensaje = new("SUCCESS", "Categoría eliminada exitosamente");
+                    return respuesta.RespuestaExito(mensaje);
+                }
 
-                return false;
+                mensaje = new("NO-DELETE-DB", "Categoría no fue posible eliminarla, valide si existe dentro de los registros");
+                return respuesta.RespuestaError(400, mensaje);
             }
             catch (Exception ex)
             {
-                return false;
+                mensaje = new("NO-CON-DB", "Tenemos problemas con la base de datos, reporte al administrador", ex);
+                return respuesta.RespuestaError(500, mensaje);
             }
             finally
             {
@@ -125,21 +143,29 @@ public class CategoriaPersistencia : ICategoriaPersistencia
         }
     }
 
-    public async Task<Categoria> ObtenerCategoria(int id)
+    public async Task<Respuesta<Categoria, Mensaje>> ObtenerCategoria(int id)
     {
         using (MySqlConnection conn = new(_stringConnection))
         {
+            Respuesta<Categoria, Mensaje> respuesta = new();
+            Mensaje mensaje;
+
             try
             {
                 await conn.OpenAsync();
 
-                var resultado = await conn.QueryFirstAsync<Categoria>("SELECT * FROM categoria WHERE condicion = 1 AND idcategoria = @Id", new { Id = id});
+                var resultado = await conn.QueryFirstAsync<Categoria>("SELECT * FROM categoria WHERE condicion = 1 AND idcategoria = @Id", new { Id = id });
 
-                return resultado;
+                if (resultado is not null)
+                    return respuesta.RespuestaExito(resultado);
+
+                mensaje = new("NO-EXIST-DB", "Categoría no se encuentra dentro de los registros");
+                return respuesta.RespuestaError(400, mensaje);
             }
             catch (Exception ex)
             {
-                return null;
+                mensaje = new("NO-CON-DB", "Tenemos problemas con la base de datos, reporte al administrador", ex);
+                return respuesta.RespuestaError(500, mensaje);
             }
             finally
             {
@@ -149,21 +175,29 @@ public class CategoriaPersistencia : ICategoriaPersistencia
         }
     }
 
-    public async Task<List<Categoria>> ObtenerCategorias()
+    public async Task<Respuesta<List<Categoria>, Mensaje>> ObtenerCategorias()
     {
         using (MySqlConnection conn = new(_stringConnection))
         {
+            Respuesta<List<Categoria>, Mensaje> respuesta = new();
+            Mensaje mensaje;
+
             try
             {
                 await conn.OpenAsync();
 
                 var resultado = await conn.QueryAsync<Categoria>("SELECT * FROM categoria WHERE condicion = 1");
 
-                return resultado.ToList();
+                if (resultado is not null)
+                    return respuesta.RespuestaExito(resultado.ToList());
+
+                mensaje = new("NO-EXIST-DB", "No existen categorías en la base de datos");
+                return respuesta.RespuestaError(400, mensaje);
             }
             catch (Exception ex)
             {
-                return null;
+                mensaje = new("NO-CON-DB", "Tenemos problemas con la base de datos, reporte al administrador", ex);
+                return respuesta.RespuestaError(500, mensaje);
             }
             finally
             {
@@ -176,9 +210,9 @@ public class CategoriaPersistencia : ICategoriaPersistencia
 
 public interface ICategoriaPersistencia
 {
-    Task<Categoria> ActualizarCategoria(Categoria request);
-    Task<Categoria> CrearCategoria(Categoria request);
-    Task<bool> EliminarCategoria(int id);
-    Task<Categoria> ObtenerCategoria(int id);
-    Task<List<Categoria>> ObtenerCategorias();
+    Task<Respuesta<Categoria, Mensaje>> ActualizarCategoria(Categoria request);
+    Task<Respuesta<Categoria, Mensaje>> CrearCategoria(Categoria request);
+    Task<Respuesta<Mensaje, Mensaje>> EliminarCategoria(int id);
+    Task<Respuesta<Categoria, Mensaje>> ObtenerCategoria(int id);
+    Task<Respuesta<List<Categoria>, Mensaje>> ObtenerCategorias();
 }

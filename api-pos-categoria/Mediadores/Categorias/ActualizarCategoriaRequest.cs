@@ -1,17 +1,18 @@
 using api_pos_categoria.Modelos;
+using api_pos_categoria.Modelos.Global;
 using api_pos_categoria.Servicios;
 using MediatR;
 
 namespace api_pos_categoria.Mediadores.Categorias;
 
-public class ActualizarCategoriaRequest : IRequest<Categoria>
+public class ActualizarCategoriaRequest : IRequest<Respuesta<Categoria, Mensaje>>
 {
     public int Id { get; set; }
     public string Nombre { get; set; } = string.Empty;
     public string Descripcion { get; set; } = string.Empty;
 }
 
-public class ActualizarCategoriaHandler : IRequestHandler<ActualizarCategoriaRequest, Categoria>
+public class ActualizarCategoriaHandler : IRequestHandler<ActualizarCategoriaRequest, Respuesta<Categoria, Mensaje>>
 {
     private readonly ICategoriaServicio _servicio;
 
@@ -20,7 +21,7 @@ public class ActualizarCategoriaHandler : IRequestHandler<ActualizarCategoriaReq
         _servicio = servicio;
     }
 
-    public async Task<Categoria> Handle(ActualizarCategoriaRequest request, CancellationToken cancellationToken)
+    public async Task<Respuesta<Categoria, Mensaje>> Handle(ActualizarCategoriaRequest request, CancellationToken cancellationToken)
     {
         Categoria categoria = new()
         {

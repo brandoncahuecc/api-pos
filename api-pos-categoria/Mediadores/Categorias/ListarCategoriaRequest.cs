@@ -1,59 +1,72 @@
 using api_pos_categoria.Modelos;
+using api_pos_categoria.Modelos.Global;
 using api_pos_categoria.Servicios;
 using MediatR;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace api_pos_categoria.Mediadores.Categorias;
 
-public class ListarCategoriaRequest : IRequest<List<Categoria>>
+public class ListarCategoriaRequest : IRequest<Respuesta<List<Categoria>, Mensaje>>
 {
 
 }
 
-public class ListarCategoriaHandler : IRequestHandler<ListarCategoriaRequest, List<Categoria>>
+public class ListarCategoriaHandler : IRequestHandler<ListarCategoriaRequest, Respuesta<List<Categoria>, Mensaje>>
 {
     private readonly ICategoriaServicio _servicio;
     private readonly IDistributedCache _distributed;
+    private readonly ILogger<ListarCategoriaHandler> _logger;
 
-    public ListarCategoriaHandler(ICategoriaServicio servicio, IDistributedCache distributed)
+    public ListarCategoriaHandler(ICategoriaServicio servicio,
+        IDistributedCache distributed,
+        ILogger<ListarCategoriaHandler> logger)
     {
         _servicio = servicio;
         _distributed = distributed;
+        _logger = logger;
     }
 
-    public async Task<List<Categoria>> Handle(ListarCategoriaRequest request, CancellationToken cancellationToken)
+    public async Task<Respuesta<List<Categoria>, Mensaje>> Handle(ListarCategoriaRequest request, CancellationToken cancellationToken)
     {
+        int num = 0;
+        var result = 8 / num;
+
+        _logger.LogInformation("Inicio la ejecución del listar categoria");
+        Respuesta<List<Categoria>, Mensaje> resultado = new();
         try
         {
+            _logger.LogInformation("Validando si existen cache de categoria");
+
             string categoriasCache = await _distributed.GetStringAsync("Categorias");
             if (!string.IsNullOrEmpty(categoriasCache))
             {
                 var categorias = JsonConvert.DeserializeObject<List<Categoria>>(categoriasCache);
-                return categorias;
+                return resultado.RespuestaExito(categorias);
             }
         }
         catch (Exception ex)
         {
-
+            _logger.LogError(ex, "Fallo al obtener la cache de categoria");
         }
 
-        var resultado = await _servicio.ObtenerCategorias();
+        resultado = await _servicio.ObtenerCategorias();
 
         try
         {
             DistributedCacheEntryOptions options = new();
             options.SetAbsoluteExpiration(TimeSpan.FromSeconds(30));
-
-            if (resultado.Count > 0)
-                _distributed.SetStringAsync("Categorias", JsonConvert.SerializeObject(resultado), options);
+            
+            _logger.LogInformation("Inicio el seteo de cache de categoria");
+            
+            if (resultado.Exito && resultado.Objeto.Count > 0)
+                _distributed.SetStringAsync("Categorias", JsonConvert.SerializeObject(resultado.Objeto), options);
         }
         catch (Exception ex)
         {
-
+            _logger.LogError(ex, "Fallo al setear la cache de categoria");
         }
-
-        await Task.Delay(5000);
 
         return resultado;
     }
