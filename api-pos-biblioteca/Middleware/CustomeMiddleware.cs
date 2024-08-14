@@ -1,7 +1,9 @@
-﻿using api_pos_categoria.Modelos.Global;
+﻿using api_pos_biblioteca.Modelos.Global;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
-namespace api_pos_categoria.Middleware
+namespace api_pos_biblioteca.Middleware
 {
     public class CustomeMiddleware
     {

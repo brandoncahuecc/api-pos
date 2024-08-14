@@ -1,4 +1,8 @@
 .vs
+api-pos-biblioteca/bin
+api-pos-biblioteca/obj
 api-pos-categoria/bin
 api-pos-categoria/obj
+api-pos-usuario/bin
+api-pos-usuario/obj
 logs

@@ -1,6 +1,6 @@
 using System;
 
-namespace api_pos_categoria.Modelos;
+namespace api_pos_biblioteca.Modelos;
 
 public class Categoria
 {

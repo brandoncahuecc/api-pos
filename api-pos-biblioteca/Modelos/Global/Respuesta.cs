@@ -1,4 +1,4 @@
-﻿namespace api_pos_categoria.Modelos.Global
+﻿namespace api_pos_biblioteca.Modelos.Global
 {
     public class Respuesta<TExito, TMensaje>
     {

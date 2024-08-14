@@ -1,9 +1,11 @@
 using api_pos_biblioteca.Dependencias;
 using api_pos_biblioteca.Middleware;
-using api_pos_categoria.Mediadores.Categorias;
-using api_pos_categoria.Persistencia;
-using api_pos_categoria.Servicios;
-using Serilog;
+using api_pos_usuario.Mediadores;
+using api_pos_usuario.Persistencia;
+using api_pos_usuario.Servicios;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,11 +18,12 @@ builder.Services.AddSwaggerGen();
 
 builder.Logging.AgregarLogging();
 builder.Services.AgregarReddisCache();
+builder.Services.AgregarJwtToken();
 
-builder.Services.AddTransient<ICategoriaPersistencia, CategoriaPersistencia>();
-builder.Services.AddTransient<ICategoriaServicio, CategoriaServicio>();
+builder.Services.AddTransient<IUsuarioPersistencia, UsuarioPersistencia>();
+builder.Services.AddTransient<IUsuarioServicio, UsuarioServicio>();
 
-builder.Services.AgregarMediador<ListarCategoriaRequest>();
+builder.Services.AgregarMediador<IniciarSesionRequest>();
 
 var app = builder.Build();
 

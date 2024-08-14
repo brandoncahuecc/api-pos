@@ -1,3 +1,4 @@
+using api_pos_biblioteca.Controllers;
 using api_pos_categoria.Mediadores.Categorias;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

@@ -1,6 +1,6 @@
 using System;
-using api_pos_categoria.Modelos;
-using api_pos_categoria.Modelos.Global;
+using api_pos_biblioteca.Modelos;
+using api_pos_biblioteca.Modelos.Global;
 using api_pos_categoria.Persistencia;
 
 namespace api_pos_categoria.Servicios;

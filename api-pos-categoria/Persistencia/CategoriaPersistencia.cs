@@ -1,5 +1,5 @@
-using api_pos_categoria.Modelos;
-using api_pos_categoria.Modelos.Global;
+using api_pos_biblioteca.Modelos;
+using api_pos_biblioteca.Modelos.Global;
 using Dapper;
 using MySql.Data.MySqlClient;
 

@@ -1,7 +1,7 @@
-﻿using api_pos_categoria.Modelos.Global;
+﻿using api_pos_biblioteca.Modelos.Global;
 using Microsoft.AspNetCore.Mvc;
 
-namespace api_pos_categoria.Controllers
+namespace api_pos_biblioteca.Controllers
 {
     public class CustomeControllerBase : ControllerBase
     {
