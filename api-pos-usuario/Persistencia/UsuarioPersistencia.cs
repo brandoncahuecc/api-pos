@@ -14,7 +14,7 @@ namespace api_pos_usuario.Persistencia
             _stringConnection = Environment.GetEnvironmentVariable("StringConnection") ?? string.Empty;
         }
 
-        public async Task<Respuesta<Usuario, Mensaje>> BuscarUsuarioPorLogin(string login)
+        public async Task<Respuesta<Usuario, Mensaje>> BuscarUsuarioPorLogin(string login, int idUsuario)
         {
             using (MySqlConnection conn = new(_stringConnection))
             {
@@ -41,9 +41,9 @@ idsucursal,
 condicion
 FROM usuario
 WHERE condicion = 1
-AND login = @Login";
+AND (login = @Login OR idusuario = @IdUsuario)";
 
-                    var resultado = await conn.QueryFirstAsync<Usuario>(query, new { Login = login });
+                    var resultado = await conn.QueryFirstAsync<Usuario>(query, new { Login = login, IdUsuario = idUsuario });
 
                     if (resultado is not null)
                         return respuesta.RespuestaExito(resultado);
@@ -63,10 +63,34 @@ AND login = @Login";
                 }
             }
         }
+
+        public Respuesta<Mensaje, Mensaje> GuardarRefreshToken(int idUsuario, string refreshToken)
+        {
+            Respuesta<Mensaje, Mensaje> respuesta = new();
+            /*
+             Todo el codigo necesario para almacenar el token en base de datos relacionado al Usuario
+             */
+
+
+            return respuesta.RespuestaExito(new Mensaje("SUCCESS", "Token almacenado"));
+        }
+
+        public Respuesta<Mensaje, Mensaje> ValidarRefreshToken(int idUsuario, string refreshToken)
+        {
+            Respuesta<Mensaje, Mensaje> respuesta = new();
+            /*
+            Todo el codigo necesario para validar que el token en base de datos relacionado al Usuario aun este vigente y activo
+            */
+
+            return respuesta.RespuestaExito(new Mensaje("SUCCESS", "Token Valido"));
+        }
     }
 
     public interface IUsuarioPersistencia
     {
-        Task<Respuesta<Usuario, Mensaje>> BuscarUsuarioPorLogin(string login);
+        Task<Respuesta<Usuario, Mensaje>> BuscarUsuarioPorLogin(string login, int idUsuario);
+        Respuesta<Mensaje, Mensaje> GuardarRefreshToken(int idUsuario, string refreshToken);
+
+        Respuesta<Mensaje, Mensaje> ValidarRefreshToken(int idUsuario, string refreshToken);
     }
 }

@@ -30,9 +30,6 @@ public class ListarCategoriaHandler : IRequestHandler<ListarCategoriaRequest, Re
 
     public async Task<Respuesta<List<Categoria>, Mensaje>> Handle(ListarCategoriaRequest request, CancellationToken cancellationToken)
     {
-        int num = 0;
-        var result = 8 / num;
-
         _logger.LogInformation("Inicio la ejecución del listar categoria");
         Respuesta<List<Categoria>, Mensaje> resultado = new();
         try

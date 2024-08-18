@@ -5,9 +5,13 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "api-pos-categoria", "api-pos-categoria\api-pos-categoria.csproj", "{10EF0674-CC21-48BC-B4E4-45153DF5943B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "api-pos-usuario", "api-pos-usuario\api-pos-usuario.csproj", "{D6F46474-ED8C-4E92-9D73-4F7A2BA0AEB0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "api-pos-usuario", "api-pos-usuario\api-pos-usuario.csproj", "{D6F46474-ED8C-4E92-9D73-4F7A2BA0AEB0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "api-pos-biblioteca", "api-pos-biblioteca\api-pos-biblioteca.csproj", "{43774703-3C2F-4650-9ED0-1D9BF50B770D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "api-pos-biblioteca", "api-pos-biblioteca\api-pos-biblioteca.csproj", "{43774703-3C2F-4650-9ED0-1D9BF50B770D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "api-pos-gateway", "api-pos-gateway\api-pos-gateway.csproj", "{C1D0136C-B5E9-4837-88FF-5E3AD1F94D13}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{4C50D958-A2CE-47E0-976D-CAC656FD919E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +31,14 @@ Global
 		{43774703-3C2F-4650-9ED0-1D9BF50B770D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43774703-3C2F-4650-9ED0-1D9BF50B770D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{43774703-3C2F-4650-9ED0-1D9BF50B770D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1D0136C-B5E9-4837-88FF-5E3AD1F94D13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1D0136C-B5E9-4837-88FF-5E3AD1F94D13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1D0136C-B5E9-4837-88FF-5E3AD1F94D13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1D0136C-B5E9-4837-88FF-5E3AD1F94D13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C50D958-A2CE-47E0-976D-CAC656FD919E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C50D958-A2CE-47E0-976D-CAC656FD919E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C50D958-A2CE-47E0-976D-CAC656FD919E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C50D958-A2CE-47E0-976D-CAC656FD919E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

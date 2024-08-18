@@ -1,0 +1,57 @@
+version: '3.4'
+
+services:
+  api-pos-categoria:
+    image: ${DOCKER_REGISTRY-}apiposcategoria
+    build:
+      context: .
+      dockerfile: api-pos-categoria/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - StringConnection=Server=192.168.1.20; Port=3306; Database=dbticel; Uid=bcahuecc; Pwd=Ab123456*;
+      - RedisConnection=192.168.1.20:6379
+      - ClaveSecretaJwt=MiClaveSecreta@NetCore2024MiClaveSecreta@NetCore2024MiClaveSecreta@NetCore2024
+    ports:
+      - "6000:8080"
+      - "6001:8081"
+    networks:
+      mirednetcore:
+
+  api-pos-usuario:
+    image: ${DOCKER_REGISTRY-}apiposusuario
+    build:
+      context: .
+      dockerfile: api-pos-usuario/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - StringConnection=Server=192.168.1.20; Port=3306; Database=dbticel; Uid=bcahuecc; Pwd=Ab123456*;
+      - RedisConnection=192.168.1.20:6379
+      - ClaveSecretaJwt=MiClaveSecreta@NetCore2024MiClaveSecreta@NetCore2024MiClaveSecreta@NetCore2024
+    ports:
+      - "7000:8080"
+      - "7001:8081"
+    networks:
+      mirednetcore:
+  
+  api-pos-gateway:
+    image: ${DOCKER_REGISTRY-}apiposgateway
+    build:
+      context: .
+      dockerfile: api-pos-gateway/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+    ports:
+      - "8000:8080"
+      - "8001:8081"
+    networks:
+      mirednetcore:
+  
+networks:
+  mirednetcore:
+    driver: bridge

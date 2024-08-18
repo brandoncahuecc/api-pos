@@ -16,6 +16,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Logging.AgregarLogging();
 builder.Services.AgregarReddisCache();
+builder.Services.AgregarJwtToken();
 
 builder.Services.AddTransient<ICategoriaPersistencia, CategoriaPersistencia>();
 builder.Services.AddTransient<ICategoriaServicio, CategoriaServicio>();

@@ -1,6 +1,7 @@
 using api_pos_biblioteca.Controllers;
 using api_pos_categoria.Mediadores.Categorias;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api_pos_categoria.Controllers
@@ -17,6 +18,7 @@ namespace api_pos_categoria.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Escritorio")]
         public async Task<IActionResult> ObtenerCategorias()
         {
             var resultado = await _mediator.Send(new ListarCategoriaRequest { });
@@ -24,6 +26,7 @@ namespace api_pos_categoria.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Compras,Acceso")]
         public async Task<IActionResult> ObtenerCategoria(int id)
         {
             var resultado = await _mediator.Send(new ObtenerCategoriaRequest { Id = id });
