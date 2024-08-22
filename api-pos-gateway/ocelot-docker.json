@@ -4,7 +4,7 @@
 
     {
       "DownstreamPathTemplate": "/api/Login",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "api-pos-usuario",
@@ -17,7 +17,7 @@
 
     {
       "DownstreamPathTemplate": "/api/Login/Refresh",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "api-pos-usuario",
@@ -33,7 +33,7 @@
 
     {
       "DownstreamPathTemplate": "/api/Categorias",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "api-pos-categoria",
@@ -46,7 +46,7 @@
 
     {
       "DownstreamPathTemplate": "/api/Categorias/{id}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "api-pos-categoria",
