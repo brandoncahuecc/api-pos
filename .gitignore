@@ -7,5 +7,7 @@ api-pos-gateway/bin
 api-pos-gateway/obj
 api-pos-usuario/bin
 api-pos-usuario/obj
+api-pos-articulo/bin
+api-pos-articulo/obj
 obj
 logs

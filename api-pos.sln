@@ -9,9 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "api-pos-usuario", "api-pos-
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "api-pos-biblioteca", "api-pos-biblioteca\api-pos-biblioteca.csproj", "{43774703-3C2F-4650-9ED0-1D9BF50B770D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "api-pos-gateway", "api-pos-gateway\api-pos-gateway.csproj", "{C1D0136C-B5E9-4837-88FF-5E3AD1F94D13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "api-pos-gateway", "api-pos-gateway\api-pos-gateway.csproj", "{C1D0136C-B5E9-4837-88FF-5E3AD1F94D13}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{4C50D958-A2CE-47E0-976D-CAC656FD919E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "api-pos-articulo", "api-pos-articulo\api-pos-articulo.csproj", "{13FF8625-9F5F-41C3-A5B9-C36D6D33C563}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{4C50D958-A2CE-47E0-976D-CAC656FD919E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C50D958-A2CE-47E0-976D-CAC656FD919E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C50D958-A2CE-47E0-976D-CAC656FD919E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13FF8625-9F5F-41C3-A5B9-C36D6D33C563}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13FF8625-9F5F-41C3-A5B9-C36D6D33C563}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13FF8625-9F5F-41C3-A5B9-C36D6D33C563}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13FF8625-9F5F-41C3-A5B9-C36D6D33C563}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
