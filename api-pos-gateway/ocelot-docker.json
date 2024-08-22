@@ -7,8 +7,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7085
+          "Host": "api-pos-usuario",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/Login",
@@ -20,8 +20,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7085
+          "Host": "api-pos-usuario",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/Refresh",
@@ -36,8 +36,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7090
+          "Host": "api-pos-categoria",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/Categoria",
@@ -49,8 +49,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7090
+          "Host": "api-pos-categoria",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/Categorias/{id}",

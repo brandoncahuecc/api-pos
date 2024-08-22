@@ -2,56 +2,66 @@ version: '3.4'
 
 services:
   api-pos-categoria:
+    container_name: api-categoria
     image: ${DOCKER_REGISTRY-}apiposcategoria
     build:
       context: .
       dockerfile: api-pos-categoria/Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=8080
-      - ASPNETCORE_HTTPS_PORTS=8081
+      - ASPNETCORE_HTTP_PORTS=80
       - StringConnection=Server=192.168.1.20; Port=3306; Database=dbticel; Uid=bcahuecc; Pwd=Ab123456*;
-      - RedisConnection=192.168.1.20:6379
+      - RedisConnection=api-pos-redis:6379
       - ClaveSecretaJwt=MiClaveSecreta@NetCore2024MiClaveSecreta@NetCore2024MiClaveSecreta@NetCore2024
-    ports:
-      - "6000:8080"
-      - "6001:8081"
     networks:
       mirednetcore:
+    restart: always
+    depends_on:
+      api-pos-redis:
+        condition: service_started
 
   api-pos-usuario:
+    container_name: api-usuario
     image: ${DOCKER_REGISTRY-}apiposusuario
     build:
       context: .
       dockerfile: api-pos-usuario/Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=8080
-      - ASPNETCORE_HTTPS_PORTS=8081
+      - ASPNETCORE_HTTP_PORTS=80
       - StringConnection=Server=192.168.1.20; Port=3306; Database=dbticel; Uid=bcahuecc; Pwd=Ab123456*;
-      - RedisConnection=192.168.1.20:6379
+      - RedisConnection=api-pos-redis:6379
       - ClaveSecretaJwt=MiClaveSecreta@NetCore2024MiClaveSecreta@NetCore2024MiClaveSecreta@NetCore2024
-    ports:
-      - "7000:8080"
-      - "7001:8081"
     networks:
       mirednetcore:
+    restart: always
+    depends_on:
+      api-pos-redis:
+        condition: service_started
   
   api-pos-gateway:
+    container_name: api-gateway
     image: ${DOCKER_REGISTRY-}apiposgateway
     build:
       context: .
       dockerfile: api-pos-gateway/Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=8080
-      - ASPNETCORE_HTTPS_PORTS=8081
+      - ASPNETCORE_HTTP_PORTS=80
+      - OcelotEnvironment=-docker
     ports:
-      - "8000:8080"
-      - "8001:8081"
+      - "6000:80"
     networks:
       mirednetcore:
+    restart: always
   
+  api-pos-redis:
+    container_name: redis-cache
+    image: redis
+    networks:
+      mirednetcore:
+    restart: always
+
 networks:
   mirednetcore:
     driver: bridge
