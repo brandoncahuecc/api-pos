@@ -9,5 +9,9 @@ api-pos-usuario/bin
 api-pos-usuario/obj
 api-pos-articulo/bin
 api-pos-articulo/obj
+api-pos-compra/bin
+api-pos-compra/obj
+api-pos-persona/bin
+api-pos-persona/obj
 obj
 logs
