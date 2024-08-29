@@ -1,8 +1,8 @@
 using api_pos_biblioteca.Dependencias;
 using api_pos_biblioteca.Middleware;
-using api_pos_compra.Mediadores;
-using api_pos_compra.Persistencia;
-using api_pos_compra.Servicios;
+using api_pos_reporte.Mediadores;
+using api_pos_reporte.Persistencia;
+using api_pos_reporte.Servicios;
 using Serilog;
 using System.Text.Json.Serialization;
 
@@ -23,10 +23,10 @@ builder.Services.AgregarJwtToken();
 
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddTransient<ICompraPersistencia, CompraPersistencia>();
-builder.Services.AddTransient<ICompraServicio, CompraServicio>();
+builder.Services.AddTransient<IReportePersistencia, ReportePersistencia>();
+builder.Services.AddTransient<IReporteServicio, ReporteServicio>();
 
-builder.Services.AgregarMediador<ListarCompraRequest>();
+builder.Services.AgregarMediador<ObtenerReporteRequest>();
 
 var app = builder.Build();
 

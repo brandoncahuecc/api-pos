@@ -8,7 +8,7 @@ namespace api_pos_compra.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class ComprasController : CustomeControllerBase
     {
         private readonly IMediator _mediator;

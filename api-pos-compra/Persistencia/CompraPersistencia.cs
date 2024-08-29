@@ -24,26 +24,49 @@ public class CompraPersistencia : ICompraPersistencia
             {
                 await conn.OpenAsync();
 
-                string query = @"INSERT INTO categoria
-                (nombre, descripcion, condicion)
-                VALUES (@Nombre, @Descripcion, @Condicion)";
-
-                DynamicParameters parametros = new();
-                //parametros.Add("@Nombre", request.Nombre);
-                //parametros.Add("@Descripcion", request.Descripcion);
-                parametros.Add("@Condicion", 1);
-
-                var resultado = await conn.ExecuteAsync(query, parametros);
-
-                if (resultado > 0)
+                using (var transaccion = await conn.BeginTransactionAsync())
                 {
-                    var nuevoId = await conn.QueryFirstAsync<int>("SELECT LAST_INSERT_ID()");
-                    request.IdIngreso = nuevoId;
-                    return respuesta.RespuestaExito(request);
-                }
+                    try
+                    {
+                        string query = @"INSERT INTO ingreso
+(idproveedor, idusuario, tipo_comprobante, serie_comprobante, num_comprobante, fecha_hora, impuesto, total_compra, estado)
+VALUES(@IdProveedor, @IdUsuario, @TipoComprobante, @SerieComprobante, @NumComprobante, @FechaHora, @Impuesto, @TotalCompra, @Estado);";
 
-                mensaje = new("NO-CREATE-DB", "No fue posible crear la categoria, revise los datos proporcionados y vuelta a intentarlo");
-                return respuesta.RespuestaError(400, mensaje);
+                        DynamicParameters parametros = new();
+                        parametros.Add("@IdProveedor", request.IdProveedor);
+                        parametros.Add("@IdUsuario", request.IdUsuario);
+                        parametros.Add("@TipoComprobante", request.TipoComprobante);
+                        parametros.Add("@SerieComprobante", request.SerieComprobante);
+                        parametros.Add("@NumComprobante", request.NumComprobante);
+                        parametros.Add("@FechaHora", request.FechaHora);
+                        parametros.Add("@Impuesto", request.Impuesto);
+                        parametros.Add("@TotalCompra", request.TotalCompra);
+                        parametros.Add("@Estado", "Aceptado");
+
+                        var resultado = await conn.ExecuteAsync(query, parametros, transaccion);
+
+                        if (resultado > 0)
+                        {
+                            var nuevoId = await conn.QueryFirstAsync<int>("SELECT LAST_INSERT_ID()");
+                            request.IdIngreso = nuevoId;
+
+                            //insertar el detalle
+                            respuesta = await CrearDetalleCompra(request, conn, transaccion);
+                            await transaccion.CommitAsync();
+                            return respuesta;
+                        }
+
+                        mensaje = new("NO-CREATE-DB", "No fue posible crear la compra, revise los datos proporcionados y vuelta a intentarlo");
+                        await transaccion.RollbackAsync();
+                        return respuesta.RespuestaError(400, mensaje);
+                    }
+                    catch (Exception ex)
+                    {
+                        mensaje = new("NO-VALID-TRANSAC", "El almacenamiento de su compra no fue exitosa, reporte al administrador", ex);
+                        await transaccion.RollbackAsync();
+                        return respuesta.RespuestaError(500, mensaje);
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -56,6 +79,39 @@ public class CompraPersistencia : ICompraPersistencia
                     await conn.CloseAsync();
             }
         }
+    }
+
+    private async Task<Respuesta<Compra, Mensaje>> CrearDetalleCompra(Compra request, MySqlConnection conn, MySqlTransaction transaccion)
+    {
+        request.Detalle.ForEach(async item =>
+        {
+            string query = @"INSERT INTO detalle_ingreso
+(idingreso, idarticulo, cantidad, precio_compra, precio_venta, stock)
+VALUES(@IdIngreso, @IdArticulo, @Cantidad, @PrecioCompra, @PrecioVenta, @Stock);";
+
+            DynamicParameters parametros = new();
+            parametros.Add("@IdIngreso", request.IdIngreso);
+            parametros.Add("@IdArticulo", item.IdArticulo);
+            parametros.Add("@Cantidad", item.Cantidad);
+            parametros.Add("@PrecioCompra", item.PrecioCompra);
+            parametros.Add("@PrecioVenta", item.PrecioVenta);
+            parametros.Add("@Stock", item.Stock);
+
+            var resultado = await conn.ExecuteAsync(query, parametros, transaccion);
+
+            if (resultado > 0)
+            {
+                var nuevoId = await conn.QueryFirstAsync<int>("SELECT LAST_INSERT_ID()");
+                item.IdDetalleIngreso = nuevoId;
+            }
+            else
+            {
+                throw new Exception("No fue posible insertar el detalle de la compra, revise los datos proporcionados y vuelta a intentarlo");
+            }
+        });
+
+        Respuesta<Compra, Mensaje> respuesta = new();
+        return respuesta.RespuestaExito(request);
     }
 
     public async Task<Respuesta<Mensaje, Mensaje>> EliminarCompra(int id)
@@ -72,6 +128,7 @@ public class CompraPersistencia : ICompraPersistencia
 SET estado = @Estado WHERE idingreso = @IdCompra;";
 
                 DynamicParameters parametros = new();
+                parametros.Add("@Estado", "Anulado");
                 parametros.Add("@IdCompra", id);
 
                 var resultado = await conn.ExecuteAsync(query, parametros);
@@ -114,9 +171,11 @@ tipo_comprobante as tipocomprobante, serie_comprobante as seriecomprobante, num_
 fecha_hora as fechahora, impuesto, total_compra as totalcompra, estado, forma_pago as formapago,
 dias_credito as diascredito, fecha_hora_pago_credito as fechahorapagocredito, valor_pagar as valorpagar,
 saldo_ingreso as saldoingreso, tipo_pago as tipopago, no_cheque as nocheque,
+NULLIF(fecha_hora_generacion_pago, '0000-00-00 00:00:00') as fechahorageneracionpago,
 tipo_banco as tipobanco, numero_boleta as numeroboleta, recibo_caja_numero as recibocajanumero,
 direccion_entrega_orden_compra as direccionentregaordencompra, fecha_entrega_orden_compra as fechaentregaordencompra,
 observacion_orden_compra as observacionordencompra, usuarui_modificacion as usuaruimodificacion,
+NULLIF(fecha_modificacion, '0000-00-00 00:00:00') as fechamodificacion,
 motivo_modificacion as motivomodificacion, num_correlativo as numcorrelativo
 FROM ingreso;";
 
