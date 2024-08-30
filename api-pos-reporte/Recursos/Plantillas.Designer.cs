@@ -77,5 +77,14 @@ namespace api_pos_reporte.Recursos {
                 return ResourceManager.GetString("HtmlCompraDetalle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a https://w7.pngwing.com/pngs/895/199/png-transparent-spider-man-heroes-download-with-transparent-background-free-thumbnail.png.
+        /// </summary>
+        public static string UrlLogo {
+            get {
+                return ResourceManager.GetString("UrlLogo", resourceCulture);
+            }
+        }
     }
 }

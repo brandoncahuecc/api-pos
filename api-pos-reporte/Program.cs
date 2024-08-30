@@ -3,6 +3,8 @@ using api_pos_biblioteca.Middleware;
 using api_pos_reporte.Mediadores;
 using api_pos_reporte.Persistencia;
 using api_pos_reporte.Servicios;
+using DinkToPdf;
+using DinkToPdf.Contracts;
 using Serilog;
 using System.Text.Json.Serialization;
 
@@ -23,6 +25,7 @@ builder.Services.AgregarJwtToken();
 
 builder.Services.AddHttpContextAccessor();
 
+builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
 builder.Services.AddTransient<IReportePersistencia, ReportePersistencia>();
 builder.Services.AddTransient<IReporteServicio, ReporteServicio>();
 
