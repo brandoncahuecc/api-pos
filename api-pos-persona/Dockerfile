@@ -8,18 +8,18 @@ EXPOSE 80
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["api-pos-reporte/api-pos-reporte.csproj", "api-pos-reporte/"]
+COPY ["api-pos-persona/api-pos-persona.csproj", "api-pos-persona/"]
 COPY ["api-pos-biblioteca/api-pos-biblioteca.csproj", "api-pos-biblioteca/"]
-RUN dotnet restore "./api-pos-reporte/api-pos-reporte.csproj"
+RUN dotnet restore "./api-pos-persona/api-pos-persona.csproj"
 COPY . .
-WORKDIR "/src/api-pos-reporte"
-RUN dotnet build "./api-pos-reporte.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/api-pos-persona"
+RUN dotnet build "./api-pos-persona.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./api-pos-reporte.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./api-pos-persona.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "api-pos-reporte.dll"]
+ENTRYPOINT ["dotnet", "api-pos-persona.dll"]

@@ -1,6 +1,137 @@
 {
   "Routes": [
 
+    {
+      "DownstreamPathTemplate": "/api/Articulos",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "api-pos-articulo",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/Articulos",
+      "UpstreamHttpMethod": [ "Get", "Post" ]
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/Articulos/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "api-pos-articulo",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/Articulos/{id}",
+      "UpstreamHttpMethod": [ "Get" ]
+    },
+
+
+
+
+    {
+      "DownstreamPathTemplate": "/api/Categorias",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "api-pos-categoria",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/Categorias",
+      "UpstreamHttpMethod": [ "Get", "Post" ]
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/Categorias/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "api-pos-categoria",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/Categorias/{id}",
+      "UpstreamHttpMethod": [ "Get", "Put", "Delete" ]
+    },
+
+
+
+
+    {
+      "DownstreamPathTemplate": "/api/Compras",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "api-pos-compra",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/Compras",
+      "UpstreamHttpMethod": [ "Get", "Post" ]
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/Compras/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "api-pos-compra",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/Compras/{id}",
+      "UpstreamHttpMethod": [ "Delete" ]
+    },
+
+
+
+
+    {
+      "DownstreamPathTemplate": "/api/Personas",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "api-pos-persona",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/Personas",
+      "UpstreamHttpMethod": [ "Get", "Post" ]
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/Personas/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "api-pos-persona",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/Personas/{id}",
+      "UpstreamHttpMethod": [ "Get", "Put", "Delete" ]
+    },
+
+
+
+
+    {
+      "DownstreamPathTemplate": "/api/Reportes/{tipoReporte}/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "api-pos-reporte",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/Reportes/{tipoReporte}/{id}",
+      "UpstreamHttpMethod": [ "Get" ]
+    },
+
+
+
 
     {
       "DownstreamPathTemplate": "/api/Login",
@@ -26,36 +157,11 @@
       ],
       "UpstreamPathTemplate": "/Refresh",
       "UpstreamHttpMethod": [ "Post" ]
-    },
-
-
-
-
-    {
-      "DownstreamPathTemplate": "/api/Categorias",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "api-pos-categoria",
-          "Port": 80
-        }
-      ],
-      "UpstreamPathTemplate": "/Categoria",
-      "UpstreamHttpMethod": [ "Get", "Post" ]
-    },
-
-    {
-      "DownstreamPathTemplate": "/api/Categorias/{id}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "api-pos-categoria",
-          "Port": 80
-        }
-      ],
-      "UpstreamPathTemplate": "/Categorias/{id}",
-      "UpstreamHttpMethod": [ "Get", "Put", "Delete" ]
     }
+
+
+
+
   ],
   "GlobalConfiguration": {
     "BaseUrl": "https://localhost:7049"
